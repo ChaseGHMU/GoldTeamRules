@@ -1,25 +1,19 @@
 <div ng-controller="GameController as game">
     <h1 class="center">Codenames</h1>
-    <div class="" id="board">
-      <div class="pure-g gutters center" ng-repeat="word in game.wordList track by $index" ng-if = "$index % 5 == 0">
-        <div class = "cell pure-u-1-5" ng-class="{'blue': squareSelected(i)}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.wordList[i] != null">
-          {{game.wordList[i].word}}
-        </div>
+    <h2 class="center">Round: {{game.roundNumber}}</h2>
+    <div class = "pure-g" ng-repeat="word in game.wordList track by $index" ng-if = "$index % 5 == 0">
+      <div class = "cell pure-u-1-5" ng-class="{black: game.wordList[i].type == 'assassin' && game.wordList[i].reveal, blue: game.wordList[i].type == 'agent' && game.wordList[i].reveal, neutral: game.wordList[i].type == 'bystander' && game.wordList[i].reveal}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.wordList[i] != null">
+        {{game.wordList[i].word}}
+      </div>
+    </div>
+    <p>{{game.returnedWord}}</p>
+    <input type = "text" ng-model = "game.codeWord">
+    <button type = "button" ng-click="game.addMessage()">Submit</button>
+    <button type = "button" ng-click="game.endRound(game.roundNumber + 1)">End Round</button>
+
+    <div class = "pure-g" ng-repeat="word in game.answerSheet track by $index" ng-if = "$index % 5 == 0">
+      <div class = "cell pure-u-1-5" ng-class="{black: game.answerSheet[i].type == 'assassin', blue: game.answerSheet[i].type == 'agent', neutral: game.answerSheet[i].type == 'bystander' && game.answerSheet[i].reveal}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.answerSheet[i] != null">
+        {{game.answerSheet[i].word}}
       </div>
     </div>
 </div>
-
-<!--    <script>
-    $(function (){
-      var socket = io.connect('localhost:4000');
-
-      $('#test').on('click',function(){
-        socket.emit('clicked');
-      });
-
-      socket.on('clicked', function(){
-        console.log("button clicked");
-        $('#m').toggle();
-      });
-    });
-    </script> -->

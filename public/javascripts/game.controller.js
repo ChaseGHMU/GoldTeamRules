@@ -20,11 +20,15 @@
         vm.addMessage = addMessage;
         vm.checkSquare = checkSquare;
         vm.squareSelected = squareSelected;
-
+        vm.endRound = endRound;
+        vm.codeWord = ""
+        vm.roundNumber = 1;
+        vm.returnedWord = ""
         vm.agentNumbers = [];
         vm.assassinNumbers = [];
         vm.numArray = loadNumArray();
         vm.wordList = [];
+        vm.answerSheet = [];
 
         class Person {
             constructor(word, type){
@@ -38,7 +42,8 @@
         vm.loadWordList = loadWordList;
 
         function addMessage() {
-            SocketService.emit('clicked', 'holla');
+            SocketService.emit('codeWordSent', vm.codeWord);
+            vm.codeWord = ""
         }
 
         function squareSelected(guess){
@@ -49,15 +54,37 @@
           return $.inArray(vm.selectedIndex, guess) > -1;
         };
 
-        function checkSquare(guess) {
-            console.log(guess);
-            SocketService.emit('guessed', guess)
+        function endRound(number){
+          console.log(number);
+          SocketService.emit('bumpRound',number)
         }
 
+        function checkSquare(guess) {
+          SocketService.emit('guessed', guess)
+        }
+
+        SocketService.on('bumpRound', function(number){
+          vm.roundNumber = number;
+        })
+
+        SocketService.on('codeWordReturned', function(word){
+            vm.returnedWord = word;
+        });
+
+        SocketService.on('returnedAnswers', function(answers){
+          vm.wordList = answers;
+        });
+
         SocketService.on('returnGuess', function(guess){
-          console.log(vm.wordList[guess]+" Has been clicked");
-          vm.selectedIndex.push(guess);
-          console.log(vm.selectedIndex);
+          console.log(vm.wordList[guess].word+" Has been clicked");
+          if(vm.wordList[guess].type == 'bystander'){
+            SocketService.emit('bumpRound', ++vm.roundNumber);
+          }
+          if(vm.wordList[guess].type == 'assassin'){
+            SocketService.emit('bumpRound', 1);
+          }
+          vm.wordList[guess].reveal = true;
+          console.log(vm.wordList[guess].reveal);
         });
 
         function loadNumArray() {
@@ -75,6 +102,7 @@
             vm.words.forEach(function(w) {
                 var x = new Person(w, "bystander");
                 vm.wordList.push(x);
+                vm.answerSheet.push(x);
             });
 
             console.log(vm.wordList);
@@ -82,11 +110,15 @@
 
            vm.agentNumbers.forEach(function(x) {
                vm.wordList[x].type = "agent";
+               vm.answerSheet[x].type = "agent"
            })
 
            vm.assassinNumbers.forEach(function(x) {
                vm.wordList[x].type = "assassin";
+               vm.answerSheet[x].type = "assassin";
            })
+
+           SocketService.emit('answerSheet', vm.answerSheet);
         };
 
         function getRandomAgentNumbers() {
