@@ -2,54 +2,69 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
-    <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+    <script src="/socket.io/socket.io.js"></script>
     <script>
     $(function (){
       var socket = io.connect('localhost:4000');
 
-      $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
+      $('#test').on('click',function(){
+        socket.emit('clicked');
       });
 
-      socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(msg));
+      socket.on('clicked', function(){
+        console.log("button clicked");
+        $('#m').toggle();
       });
-      socket.on('connected', function(){
-        var name = window.prompt("Please enter a nickname","Enter name here");
-        // $('#messages').append($('<li>').text("New User Connected"));
-        if(name == null || name == ""){
-          var name = window.prompt("Please enter a nickname","Enter name here");
-        }else{
-          // $('#messages').append($('<li>').text(name+ " Connected"));
-          socket.emit('sendNickname', name);
-        }
-      });
-      socket.on('user-connected', function(name){
-        $('#messages').append($('<li>').text(name+ " Connected"));
-      })
-      socket.on('user-disconnect', function(name){
-        $('#messages').append($('<li>').text(name+ " Disconnected"));
-      })
     });
     </script>
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    <div class="pure-g">
+      <div class="pure-u-1-5" style="text-align:center">
+          <p id = "m">Fifths</p>
+      </div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+    </div>
+    <div class="pure-g">
+      <div class="pure-u-1-5" style="text-align:center">
+          <p id = "m">Fifths</p>
+      </div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+    </div>
+    <div class="pure-g">
+      <div class="pure-u-1-5" style="text-align:center">
+          <p id = "m">Fifths</p>
+      </div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+    </div>
+    <div class="pure-g">
+      <div class="pure-u-1-5" style="text-align:center">
+          <p id = "m">Fifths</p>
+      </div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+    </div>
+    <div class="pure-g">
+      <div class="pure-u-1-5" style="text-align:center">
+          <p id = "m">Fifths</p>
+      </div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+      <div class="pure-u-1-5" style="text-align:center"><p>Fifths</p></div>
+    </div>
   </body>
 </html>
