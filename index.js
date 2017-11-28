@@ -16,6 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 io.on('connection', function(socket){
   io.emit('connected');
   socket.on('clicked', function(){
+    console.log("howdy");
     socket.broadcast.emit('clicked');
   })
 });

@@ -9,12 +9,6 @@
         $routeProvider
         .when('/', {
             templateUrl : "/views/game.view.html"
-        })
-        .when('/students', {
-            templateUrl : "/views/students.view.html"
-        })
-        .when('/books', {
-            templateUrl : "/views/books.view.html"
         });
     };
 })();
