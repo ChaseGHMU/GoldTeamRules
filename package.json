@@ -1,0 +1,15 @@
+{
+  "name": "exploration3",
+  "version": "1.0.0",
+  "description": "Chat room made for exploratoin 3 using sockets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chase Allen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "socket.io": "^2.0.4"
+  }
+}
