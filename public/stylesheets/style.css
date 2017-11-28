@@ -1,6 +1,15 @@
+/*font-family: 'Merienda', cursive;
+font-family: 'Bangers', cursive;
+font-family: 'Press Start 2P', cursive;
+font-family: 'Black Ops One', cursive;*/
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url("../img/spyWallpaper.jpg");
+  background-color: #cccccc;
+  background-size: 100%;
+  padding: 20px;
+  padding: 20px 50px 20px 50px;
+  font-family: 'Black Ops One', 'cursive';
 }
 
 a {
@@ -16,14 +25,15 @@ a {
 }
 
 .cell {
-  width: 120px;
-  height: 80px;
+  font-family: 'Black Ops One', 'cursive';
+  font-size: 20px;
+  width: 18%;
+  margin: 1%;
+  padding: -1%;
   line-height: 80px;
-  margin: 5px;
-  padding: 5px;
-  display: inline-block;
-  text-align: center;
-  background: #e8e8e8
+  /*display: inline-block;*/
+  /*text-align: center;*/
+  background: #e8e8e8;
 }
 
 .blue{
@@ -36,6 +46,5 @@ a {
 }
 
 .black{
-  background: #000000;
-  color: #fff;
+  background: #000000
 }

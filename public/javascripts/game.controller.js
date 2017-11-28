@@ -9,12 +9,13 @@
     function GameController($scope, SocketService) {
         var vm = this;
         //Variables
-
+        vm.codeword = "";
         vm.words = ['Pants', 'Fan', 'Australia', 'Part', 'Dinosaur', 'Carrot',
                        'Mass', 'Vacuum','Row','Iron','Chair','Bomb','Embassy','Paper',
                        'Africa','Mint','Maple','Bat','Ship','Bear','Line',
                        'Note','Fire','Glass','Key'];
 
+        vm.selectedIndex = [-1];
         // Functions
         vm.addMessage = addMessage;
         vm.checkSquare = checkSquare;
@@ -46,11 +47,11 @@
         }
 
         function squareSelected(guess){
-          if(guess.reveal){
-            return true;
-          }else{
-            return false;
+          console.log("guess funcction")
+          if($.inArray(vm.selectedIndex,guess) > -1){
+            console.log("found in array");
           }
+          return $.inArray(vm.selectedIndex, guess) > -1;
         };
 
         function endRound(number){
@@ -93,7 +94,7 @@
                 numArray.push(n);
                 n++;
             }
-            // console.log(numArray);
+            console.log(numArray);
             return numArray;
         }
 
@@ -104,7 +105,7 @@
                 vm.answerSheet.push(x);
             });
 
-            // console.log(vm.wordList);
+            console.log(vm.wordList);
 
 
            vm.agentNumbers.forEach(function(x) {
@@ -128,8 +129,8 @@
                 vm.agentNumbers.push(x[0]);
             }
 
-            // console.log(vm.agentNumbers);
-            // console.log(vm.numArray);
+            console.log(vm.agentNumbers);
+            console.log(vm.numArray);
 
             getRandomAssassinNumbers();
         }
@@ -141,10 +142,10 @@
                 vm.assassinNumbers.push(x[0]);
             }
 
-            // console.log(vm.assassinNumbers);
+            console.log(vm.assassinNumbers);
 
             loadWordList();
-            // console.log(vm.wordList);
+            console.log(vm.wordList);
         }
 
         getRandomAgentNumbers();
