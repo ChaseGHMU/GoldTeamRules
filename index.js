@@ -13,10 +13,6 @@ app.get('/', function(req,res){
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.on('connection', function(socket){
-  io.emit('connected', function(){
-
-  });
-
   socket.on('clicked', function(){
     console.log("howdy");
     socket.broadcast.emit('clicked');
