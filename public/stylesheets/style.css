@@ -14,3 +14,27 @@ a {
 .error {
   color: red;
 }
+
+.cell {
+  width: 120px;
+  height: 80px;
+  line-height: 80px;
+  margin: 5px;
+  padding: 5px;
+  display: inline-block;
+  text-align: center;
+  background: #e8e8e8
+}
+
+.blue{
+  background: #4183cc;
+  color: #fff;
+}
+
+.neutral{
+  background: #ede2cc;
+}
+
+.black{
+  background: #000000
+}
