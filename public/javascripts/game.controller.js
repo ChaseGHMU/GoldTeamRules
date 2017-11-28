@@ -54,8 +54,6 @@
             loadWordList();
         }
 
-
-
         vm.getRandomAgentNumbers = getRandomAgentNumbers;
         vm.loadWordList = loadWordList;
 
@@ -136,7 +134,6 @@
 
             console.log(vm.wordList);
 
-
            vm.agentNumbers.forEach(function(x) {
                vm.wordList[x].type = "agent";
                vm.answerSheet[x].type = "agent"
@@ -152,12 +149,10 @@
 
         function getRandomAgentNumbers() {
             var x;
-
             while(vm.numArray.length >= 13 ) {
                 x = vm.numArray.splice(Math.floor(Math.random() * vm.numArray.length),1);
                 vm.agentNumbers.push(x[0]);
             }
-
             console.log(vm.agentNumbers);
             console.log(vm.numArray);
         }
@@ -168,11 +163,8 @@
                 x = vm.numArray.splice(Math.floor(Math.random() * vm.numArray.length),1);
                 vm.assassinNumbers.push(x[0]);
             }
-
             console.log(vm.assassinNumbers);
         }
-
-        getRandomAgentNumbers();
 
     }
 })();
