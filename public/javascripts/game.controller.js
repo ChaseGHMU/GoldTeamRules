@@ -29,6 +29,8 @@
         vm.numArray = loadNumArray();
         vm.wordList = [];
         vm.answerSheet = [];
+        vm.playerOne;
+        vm.playerTwo;
 
         class Person {
             constructor(word, type){
@@ -37,6 +39,22 @@
                 this.reveal = false;
             }
         }
+
+        class User {
+            constructor(id, grid) {
+                this.userId = id;
+                this.playerGrid = grid;
+                this.playerAnswer = [];
+            }
+        }
+
+        function prepareUser() {
+            getRandomAgentNumbers();
+            getRandomAssassinNumbers();
+            loadWordList();
+        }
+
+
 
         vm.getRandomAgentNumbers = getRandomAgentNumbers;
         vm.loadWordList = loadWordList;
@@ -70,6 +88,17 @@
         SocketService.on('codeWordReturned', function(word){
             vm.returnedWord = word;
         });
+
+        SocketService.on('startRound', function(users) {
+            prepareUser();
+            vm.playerOne = new User(users[0],vm.wordList);
+
+            prepareUser();
+            vm.playerTwo = new User(users[1],vm.wordList);
+
+            vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
+            vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
+        })
 
         SocketService.on('returnedAnswers', function(answers){
           vm.wordList = answers;
@@ -131,8 +160,6 @@
 
             console.log(vm.agentNumbers);
             console.log(vm.numArray);
-
-            getRandomAssassinNumbers();
         }
 
         function getRandomAssassinNumbers() {
@@ -143,9 +170,6 @@
             }
 
             console.log(vm.assassinNumbers);
-
-            loadWordList();
-            console.log(vm.wordList);
         }
 
         getRandomAgentNumbers();
