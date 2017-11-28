@@ -1,7 +1,7 @@
 <div ng-controller="GameController as game">
     <h1 class="center title">Codenames</h1>
     <h2 class="center counter">Round: {{game.roundNumber}}</h2>
-    <div class = "pure-g" ng-repeat="word in game.wordList track by $index" ng-if = "$index % 5 == 0">
+    <div class = "pure-g" ng-repeat="word in game.playerOne.playerGrid track by $index" ng-if = "$index % 5 == 0">
       <div class = "cell pure-u-1-5" ng-class="{black: game.wordList[i].type == 'assassin' && game.wordList[i].reveal, blue: game.wordList[i].type == 'agent' && game.wordList[i].reveal, neutral: game.wordList[i].type == 'bystander' && game.wordList[i].reveal}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.wordList[i] != null">
         {{game.wordList[i].word}}
       </div>

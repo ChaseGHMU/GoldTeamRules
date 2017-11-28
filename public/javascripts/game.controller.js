@@ -92,10 +92,13 @@
         SocketService.on('startRound', function(users) {
             prepareUser();
             vm.playerOne = new User(users[0],vm.wordList);
+            console.log(vm.playerOne);
+            vm.wordList = [];
 
             prepareUser();
             vm.playerTwo = new User(users[1],vm.wordList);
-
+            console.log(vm.playerTwo);
+            vm.wordList = [];
             vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
             vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
         })
@@ -160,6 +163,7 @@
 
             console.log(vm.agentNumbers);
             console.log(vm.numArray);
+            vm.numArray = loadNumArray();
         }
 
         function getRandomAssassinNumbers() {
@@ -172,7 +176,7 @@
             console.log(vm.assassinNumbers);
         }
 
-        getRandomAgentNumbers();
+        // getRandomAgentNumbers();
 
     }
 })();
