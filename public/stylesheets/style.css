@@ -8,8 +8,12 @@ body {
   background-color: #cccccc;
   background-size: 100%;
   padding: 20px;
-  padding: 20px 50px 20px 50px;
-  font-family: 'Black Ops One', 'cursive';
+  padding: 10px px 10px 50px;
+  font-family: 'Press Start 2P', 'cursive';
+}
+
+#board {
+  width: 75%;
 }
 
 a {
@@ -25,16 +29,23 @@ a {
 }
 
 .cell {
-  font-family: 'Black Ops One', 'cursive';
-  font-size: 20px;
-  width: 18%;
-  margin: 1%;
-  padding: -1%;
-  line-height: 80px;
+  width: 19%;
+  margin: 0.5%;
+  padding: -0.5%;
+  line-height: 60px;
   /*display: inline-block;*/
   /*text-align: center;*/
   background: #e8e8e8;
 }
+
+.pure-g .cell {
+  font-family: 'Press Start 2P', 'cursive';
+  font-size: 12px;
+}
+
+.title {
+  color: white;
+};
 
 .blue{
   background: #4183cc;
