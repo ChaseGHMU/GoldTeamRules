@@ -16,7 +16,7 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
     $(function (){
-      var socket = io.connect('www.chasejordonallen.com:4000');
+      var socket = io.connect('localhost:4000');
 
       $('form').submit(function(){
         socket.emit('chat message', $('#m').val());

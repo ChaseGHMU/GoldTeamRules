@@ -1,0 +1,81 @@
+<div ng-controller="BookController as bookList">
+    <h1 class="center">Books</h1>
+    <h3>Book List</h3>
+    <div>
+        There are {{bookList.inStock}} books in stock and {{bookList.outOfStock}} books out of stock.
+    </div><br>
+    <table class="pure-table" ng-if="bookList.inStock > 0 || bookList.outOfStock > 0">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>ISBN</th>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Year</th>
+                <th>Type</th>
+                <th>Edition</th>
+                <th>In Stock (Toggleable)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="book in bookList.books track by $index">
+                <td>{{$index + 1}}</td>
+                <td>{{book.number}}</td>
+                <td>{{book.name}}</td>
+                <td>{{book.author}}</td>
+                <td>{{book.publisher}}</td>
+                <td>{{book.year}}</td>
+                <td>{{book.type}}</td>
+                <td>{{book.edition}}</td>
+                <td><button class="pure-button" ng-click="bookList.toggleStock(this)">{{book.stocked === true ? 'In Stock' : 'Out of Stock'}}</button></td>
+                <td><button class="pure-button" ng-click="bookList.books.splice($index,1); bookList.archiveBooks()">Remove</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <h3>Add New Book</h3>
+    <div class="pure-form pure-form-aligned">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="bookNumber">ISBN</label>
+                <input id="bookNumber" type="text" ng-model="bookList.numberText"> {{book.numberText}}
+            </div>
+
+            <div class="pure-control-group">
+                <label for="bookName">Name</label>
+                <input id="bookName" type="text" ng-model="bookList.nameText">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="bookAuthor">Author</label>
+                <input id="bookAuthor" type="text" ng-model="bookList.authorText">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="bookPublisher">Publisher</label>
+                <input id="bookPublisher" type="text" ng-model="bookList.publisherText">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="bookYear">Year</label>
+                <input id="bookYear" type="text" ng-model="bookList.yearText">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="bookType">Type</label>
+                <input id="bookType" type="text" ng-model="bookList.typeText">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="bookEdition">Edition</label>
+                <input id="bookEdition" type="text" ng-model="bookList.editionText">
+            </div>
+
+            <div class="pure-controls">
+                <button class="pure-button" type="submit" ng-click="bookList.addBook()">Submit</button>
+                <span class="error" ng-if="bookList.showError">{{bookList.errorMsg}}</span>
+            </div>
+        </fieldset>
+    </div>     
+</div>
