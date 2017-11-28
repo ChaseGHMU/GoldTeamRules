@@ -3,6 +3,12 @@
     <button ng-click="game.addMessage()">THIS</button>
 </div>
 
+<div class = "pure-g" ng-repeat="word in game.wordList track by $index" ng-if = "$index % 5">
+  <div class = "cell pure-u-1-5" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]">
+    {{game.wordList[i]}}
+  </div>
+</div>
+
 <!--    <script>
     $(function (){
       var socket = io.connect('localhost:4000');
