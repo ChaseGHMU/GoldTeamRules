@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  padding: 25px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -11,18 +11,30 @@ a {
   text-align: center;
 }
 
+#board {
+  width: 700px;
+  margin: none;
+  padding: none;
+}
+
+.centaur {
+  display: inline-block;
+  width: 100%;
+  margin: auto;
+}
+
 .error {
   color: red;
 }
 
 .cell {
-  width: 120px;
-  height: 80px;
+  width: 16%;
+  height: 75%;
   line-height: 80px;
-  margin: 5px;
-  padding: 5px;
-  display: inline-block;
-  text-align: center;
+  margin: 7px;
+  padding: 7px;
+  /*display: inline-block;*/
+  /*text-align: center;*/
   background: #e8e8e8
 }
 
@@ -38,3 +50,18 @@ a {
 .black{
   background: #000000
 }
+
+@media only screen and (max-width: 720px) {
+  #board {
+    width: 400px;
+    height: 50%;
+    line-height: 20px;
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  #board {
+    width: 250px;
+  }
+}
+

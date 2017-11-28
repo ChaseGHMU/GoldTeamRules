@@ -1,9 +1,10 @@
 <div ng-controller="GameController as game">
     <h1 class="center">Codenames</h1>
-    <button ng-click="game.addMessage()">THIS</button>
-    <div class = "pure-g" ng-repeat="word in game.wordList track by $index" ng-if = "$index % 5 == 0">
-      <div class = "cell pure-u-1-5" ng-class="{'blue': squareSelected(i)}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.wordList[i] != null">
-        {{game.wordList[i]}}
+    <div class="centaur" id="board">
+      <div class="pure-g center" ng-repeat="word in game.wordList track by $index" ng-if = "$index % 5 == 0">
+        <div class = "cell pure-u-1-5" ng-class="{'blue': squareSelected(i)}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.wordList[i] != null">
+          {{game.wordList[i].word}}
+        </div>
       </div>
     </div>
 </div>
