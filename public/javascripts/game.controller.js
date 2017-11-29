@@ -148,17 +148,20 @@
 
             console.log(vm.wordList);
 
-           vm.agentNumbers.forEach(function(x) {
+            console.log("The agents: " + vm.agentNumbers);
+            vm.agentNumbers.forEach(function(x) {
                vm.wordList[x].type = "agent";
-               vm.answerSheet[x].type = "agent"
-           })
+               vm.answerSheet[x].type = "agent";
+            });
 
-           vm.assassinNumbers.forEach(function(x) {
+            console.log("The assassins: " + vm.assassinNumbers);
+            vm.assassinNumbers.forEach(function(x) {
+                
                vm.wordList[x].type = "assassin";
                vm.answerSheet[x].type = "assassin";
-           })
+            });
 
-           SocketService.emit('answerSheet', vm.answerSheet);
+            SocketService.emit('answerSheet', vm.answerSheet);
         };
 
         function getRandomAgentNumbers() {
@@ -167,9 +170,6 @@
                 x = vm.numArray.splice(Math.floor(Math.random() * vm.numArray.length),1);
                 vm.agentNumbers.push(x[0]);
             }
-            console.log(vm.agentNumbers);
-            console.log(vm.numArray);
-            vm.numArray = loadNumArray();
         }
 
         function getRandomAssassinNumbers() {
