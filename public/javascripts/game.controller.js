@@ -110,6 +110,8 @@
             vm.wordList = [];
             vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
             vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
+
+            console.log(vm.answerSheet);
         })
 
         SocketService.on('returnedAnswers', function(answers){
@@ -156,7 +158,6 @@
 
             console.log("The assassins: " + vm.assassinNumbers);
             vm.assassinNumbers.forEach(function(x) {
-                
                vm.wordList[x].type = "assassin";
                vm.answerSheet[x].type = "assassin";
             });
