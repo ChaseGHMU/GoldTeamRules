@@ -14,10 +14,9 @@
                        'Mass', 'Vacuum','Row','Iron','Chair','Bomb','Embassy','Paper',
                        'Africa','Mint','Maple','Bat','Ship','Bear','Line',
                        'Note','Fire','Glass','Key'];
-
         vm.selectedIndex = [-1];
+
         // Functions
-        vm.addMessage = addMessage;
         vm.checkSquare = checkSquare;
         vm.squareSelected = squareSelected;
         vm.endRound = endRound;
@@ -54,6 +53,15 @@
             loadWordList();
         }
 
+        function clearUser() {
+            vm.numArray = [];
+            vm.numArray = loadNumArray();
+            vm.agentNumbers = [];
+            vm.assassinNumbers = [];
+            vm.wordList = [];
+            vm.answerSheet = [];
+        }
+
         vm.getRandomAgentNumbers = getRandomAgentNumbers;
         vm.loadWordList = loadWordList;
 
@@ -88,12 +96,15 @@
         });
 
         SocketService.on('startRound', function(users) {
+            clearUser();
             prepareUser();
+            vm.playerOne = null;
             vm.playerOne = new User(users[0],vm.wordList);
             console.log(vm.playerOne);
-            vm.wordList = [];
 
+            clearUser();
             prepareUser();
+            vm.playerTwo = null;
             vm.playerTwo = new User(users[1],vm.wordList);
             console.log(vm.playerTwo);
             vm.wordList = [];
