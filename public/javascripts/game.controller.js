@@ -20,9 +20,10 @@
         vm.checkSquare = checkSquare;
         vm.squareSelected = squareSelected;
         vm.endRound = endRound;
-        vm.codeWord = ""
+        vm.addMessage = addMessage;
+        vm.codeWord;
         vm.roundNumber = 1;
-        vm.returnedWord = ""
+        vm.returnedWord;
         vm.agentNumbers = [];
         vm.assassinNumbers = [];
         vm.numArray = loadNumArray();
@@ -66,6 +67,7 @@
         vm.loadWordList = loadWordList;
 
         function addMessage() {
+          console.log(vm.codeWord);
             SocketService.emit('codeWordSent', vm.codeWord);
             vm.codeWord = ""
         }
@@ -84,6 +86,13 @@
         }
 
         function checkSquare(guess) {
+          if(vm.wordList[guess].type == 'bystander'){
+            SocketService.emit('bumpRound', ++vm.roundNumber);
+          }
+          if(vm.wordList[guess].type == 'assassin'){
+            SocketService.emit('bumpRound', 1);
+          }
+          vm.wordList[guess].reveal = true;
           SocketService.emit('guessed', guess)
         }
 
@@ -92,7 +101,7 @@
         })
 
         SocketService.on('notEnoughUsers', function(){
-          
+
         });
 
         SocketService.on('codeWordReturned', function(word){
@@ -124,14 +133,6 @@
 
         SocketService.on('returnGuess', function(guess){
           console.log(vm.wordList[guess].word+" Has been clicked");
-          if(vm.wordList[guess].type == 'bystander'){
-            SocketService.emit('bumpRound', ++vm.roundNumber);
-          }
-          if(vm.wordList[guess].type == 'assassin'){
-            SocketService.emit('bumpRound', 1);
-          }
-          vm.wordList[guess].reveal = true;
-          console.log(vm.wordList[guess].reveal);
         });
 
         function loadNumArray() {
