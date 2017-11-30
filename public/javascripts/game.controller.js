@@ -91,6 +91,10 @@
           vm.roundNumber = number;
         })
 
+        SocketService.on('notEnoughUsers', function(){
+          
+        });
+
         SocketService.on('codeWordReturned', function(word){
             vm.returnedWord = word;
         });

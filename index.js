@@ -17,6 +17,7 @@ io.on('connection', function(socket){
   console.log(io.engine.clientsCount);
   if(io.engine.clientsCount < 2){
     users.push(socket.id);
+    io.emit('notEnoughUsers');
     console.log("Not Enough Users.")
     console.log(socket.id);
   }else if (io.engine.clientsCount > 2){
