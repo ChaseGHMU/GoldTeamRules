@@ -3,7 +3,7 @@
     <h2 class="center title counter">Round: {{game.roundNumber}}</h2>
     <div class = "pure-g" ng-repeat="word in game.playerOne.playerGrid track by $index" ng-if = "$index % 5 == 0">
       <div class = "cell pure-u-1-5" ng-class="{black: game.wordList[i].type == 'assassin' && game.wordList[i].reveal, agent: game.wordList[i].type == 'agent' && game.wordList[i].reveal, neutral: game.wordList[i].type == 'bystander' && game.wordList[i].reveal}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.wordList[i] != null">
-        {{game.wordList[i].word}}
+        {{game.playerOne.playerGrid[i].word}}
       </div>
     </div>
     <p class="suggestion">{{game.returnedWord}}</p>
@@ -14,7 +14,7 @@
 
     <div class = "pure-g" ng-repeat="word in game.playerTwo.playerAnswer track by $index" ng-if = "$index % 5 == 0">
       <div class = "cell pure-u-1-5" ng-class="{black: game.answerSheet[i].type == 'assassin', agent: game.answerSheet[i].type == 'agent', neutral: game.answerSheet[i].type == 'bystander'}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.answerSheet[i] != null">
-        {{game.answerSheet[i].word}}
+        {{game.playerTwo.playerAnswer[i].word}}
       </div>
     </div>
 </div>
