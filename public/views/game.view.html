@@ -26,7 +26,7 @@
 
     <div class = "pure-g answersheet" ng-repeat="word in game.answerSheet track by $index" ng-if = "$index % 5 == 0">
       <div class = "answercell pure-u-1-5" ng-class="{assassin: game.answerSheet[i].type == 'assassin', agent: game.answerSheet[i].type == 'agent', neutral: game.answerSheet[i].type == 'bystander'}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.answerSheet[i] != null">
-        {{game.answerSheet[i].word}}
+        {{game.playerTwo.playerAnswer[i].word}}
       </div>
     </div>
     <div class="center" style="color: steelblue;">
