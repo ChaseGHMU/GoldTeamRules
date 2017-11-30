@@ -39,6 +39,10 @@ io.on('connection', function(socket){
     console.log(users);
   })
 
+  socket.on('toggle', function(){
+    socket.broadcast.emit('yourTurn');
+  })
+
   socket.on('bumpRound', function(number){
     io.emit('bumpRound', number);
   })

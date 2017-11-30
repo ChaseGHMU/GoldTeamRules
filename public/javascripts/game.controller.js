@@ -31,6 +31,7 @@
         vm.answerSheet = [];
         vm.playerOne;
         vm.playerTwo;
+        vm.active;
 
         class Person {
             constructor(word, type){
@@ -45,6 +46,7 @@
                 this.userId = id;
                 this.playerGrid = grid;
                 this.playerAnswer = [];
+                this.active = false;
             }
         }
 
@@ -81,8 +83,15 @@
         };
 
         function endRound(number){
-          console.log(number);
-          SocketService.emit('bumpRound',number)
+          // console.log(number);
+          if(vm.active){
+            vm.active = false;
+          }else{
+            vm.active = true;
+          }
+          console.log(vm.active);
+          SocketService.emit('toggle', vm.active);
+          //SocketService.emit('bumpRound',number)
         }
 
         function checkSquare(guess) {
@@ -93,6 +102,7 @@
             SocketService.emit('bumpRound', 1);
           }
           vm.wordList[guess].reveal = true;
+          console.log(vm.playerOne.userId);
           SocketService.emit('guessed', guess)
         }
 
@@ -108,23 +118,33 @@
             vm.returnedWord = word;
         });
 
+        SocketService.on('yourTurn', function(){
+          // console.log("toggle: " + toggle);
+          if(vm.active == true){
+            vm.active = false;
+          }else{
+            vm.active = true;
+          }
+          console.log(vm.active);
+          //SocketService.emit('bumpRound');
+        })
+
         SocketService.on('startRound', function(users) {
             clearUser();
             prepareUser();
             vm.playerOne = null;
             vm.playerOne = new User(users[0],vm.wordList);
-            console.log(vm.playerOne);
-
             clearUser();
             prepareUser();
             vm.playerTwo = null;
             vm.playerTwo = new User(users[1],vm.wordList);
-            console.log(vm.playerTwo);
             vm.wordList = [];
             vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
             vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
-
-            console.log(vm.answerSheet);
+            vm.active = true;
+            console.log(vm.active);
+            SocketService.emit('startToggle');
+            // console.log(vm.answerSheet);
         })
 
         SocketService.on('returnedAnswers', function(answers){
@@ -132,7 +152,7 @@
         });
 
         SocketService.on('returnGuess', function(guess){
-          console.log(vm.wordList[guess].word+" Has been clicked");
+          // console.log(vm.wordList[guess].word+" Has been clicked");
         });
 
         function loadNumArray() {
@@ -142,7 +162,7 @@
                 numArray.push(n);
                 n++;
             }
-            console.log(numArray);
+            // console.log(numArray);
             return numArray;
         }
 
@@ -153,15 +173,15 @@
                 vm.answerSheet.push(x);
             });
 
-            console.log(vm.wordList);
+            // console.log(vm.wordList);
 
-            console.log("The agents: " + vm.agentNumbers);
+            // console.log("The agents: " + vm.agentNumbers);
             vm.agentNumbers.forEach(function(x) {
                vm.wordList[x].type = "agent";
                vm.answerSheet[x].type = "agent";
             });
 
-            console.log("The assassins: " + vm.assassinNumbers);
+            // console.log("The assassins: " + vm.assassinNumbers);
             vm.assassinNumbers.forEach(function(x) {
                vm.wordList[x].type = "assassin";
                vm.answerSheet[x].type = "assassin";
@@ -184,7 +204,7 @@
                 x = vm.numArray.splice(Math.floor(Math.random() * vm.numArray.length),1);
                 vm.assassinNumbers.push(x[0]);
             }
-            console.log(vm.assassinNumbers);
+            // console.log(vm.assassinNumbers);
         }
     }
 })();

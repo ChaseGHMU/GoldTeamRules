@@ -12,7 +12,7 @@
     <button type = "button" ng-click="game.endRound(game.roundNumber + 1)">End Round</button>
     <br><hr>
 
-    <div class = "pure-g" ng-repeat="word in game.answerSheet track by $index" ng-if = "$index % 5 == 0">
+    <div class = "pure-g" ng-repeat="word in game.playerTwo.playerAnswer track by $index" ng-if = "$index % 5 == 0">
       <div class = "cell pure-u-1-5" ng-class="{black: game.answerSheet[i].type == 'assassin', agent: game.answerSheet[i].type == 'agent', neutral: game.answerSheet[i].type == 'bystander'}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.answerSheet[i] != null">
         {{game.answerSheet[i].word}}
       </div>
