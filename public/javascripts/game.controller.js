@@ -15,6 +15,8 @@
                        'Africa','Mint','Maple','Bat','Ship','Bear','Line',
                        'Note','Fire','Glass','Key'];
         vm.selectedIndex = [-1];
+        vm.showGame;
+        vm.showWait;
 
         // Functions
         vm.checkSquare = checkSquare;
@@ -32,7 +34,7 @@
         vm.playerOne;
         vm.playerTwo;
 
-        class Person {
+        class Card {
             constructor(word, type){
                 this.word = word;
                 this.type = type;
@@ -101,7 +103,8 @@
         })
 
         SocketService.on('notEnoughUsers', function(){
-
+            vm.showGame = false;
+            vm.showWait = true;
         });
 
         SocketService.on('codeWordReturned', function(word){
@@ -124,6 +127,8 @@
             vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
             vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
 
+            vm.showMenu = false;
+            vm.showGame = true;
             console.log(vm.answerSheet);
         })
 
@@ -148,7 +153,7 @@
 
         function loadWordList() {
             vm.words.forEach(function(w) {
-                var x = new Person(w, "bystander");
+                var x = new Card(w, "bystander");
                 vm.wordList.push(x);
                 vm.answerSheet.push(x);
             });
