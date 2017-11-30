@@ -6,7 +6,7 @@
         {{game.wordList[i].word}}
       </div>
     </div>
-    <p>{{game.returnedWord}}</p>
+    <p class="suggestion">{{game.returnedWord}}</p>
     <input type = "text" ng-model = "game.codeWord">
     <button type = "button" ng-click="game.addMessage()">Submit</button>
     <button type = "button" ng-click="game.endRound(game.roundNumber + 1)">End Round</button>
