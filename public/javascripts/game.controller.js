@@ -12,7 +12,7 @@
         vm.codeword = "";
         vm.words = ['Pants', 'Fan', 'Australia', 'Part', 'Dinosaur', 'Carrot',
                        'Mass', 'Vacuum','Row','Iron','Chair','Bomb','Embassy','Paper',
-                       'Africa','Mint','Maple','Bat','Ship','Bear','Line',
+                       'Africa','Mint','Bird','Bat','Ship','Bear','Line',
                        'Note','Fire','Glass','Key'];
         vm.selectedIndex = [-1];
         vm.showGame;
@@ -126,9 +126,8 @@
             vm.wordList = [];
             vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
             vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
-
-            vm.showMenu = false;
             vm.showGame = true;
+            vm.showWait = false;
             console.log(vm.answerSheet);
         })
 
