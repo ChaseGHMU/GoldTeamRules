@@ -15,6 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 io.on('connection', function(socket){
 
   console.log(io.engine.clientsCount);
+
   if(io.engine.clientsCount < 2){
     users.push(socket.id);
     io.emit('notEnoughUsers');
@@ -24,6 +25,8 @@ io.on('connection', function(socket){
     socket.disconnect();
   }else{
     users.push(socket.id);
+    io.to(users[0]).emit('isActive', true);
+    io.to(users[1]).emit('isActive', false);
     io.emit('startRound', users);
     console.log(users);
   }

@@ -86,11 +86,7 @@
 
         function endRound(number){
           // console.log(number);
-          if(vm.active){
-            vm.active = false;
-          }else{
-            vm.active = true;
-          }
+          vm.active = !vm.active;
           console.log(vm.active);
           SocketService.emit('toggle', vm.active);
           //SocketService.emit('bumpRound',number)
@@ -112,6 +108,11 @@
           vm.roundNumber = number;
         })
 
+        SocketService.on('isActive', function(toggle){
+          vm.active = toggle;
+          console.log(vm.active);
+        })
+
         SocketService.on('notEnoughUsers', function(){
             vm.showGame = false;
             vm.showWait = true;
@@ -122,14 +123,8 @@
         });
 
         SocketService.on('yourTurn', function(){
-          // console.log("toggle: " + toggle);
-          if(vm.active == true){
-            vm.active = false;
-          }else{
-            vm.active = true;
-          }
+          vm.active = !vm.active;
           console.log(vm.active);
-          //SocketService.emit('bumpRound');
         })
 
         SocketService.on('startRound', function(users) {
@@ -146,7 +141,7 @@
             vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
             vm.showGame = true;
             vm.showWait = false;
-            console.log(vm.answerSheet);
+            // console.log(vm.answerSheet);
         })
 
         SocketService.on('returnedAnswers', function(answers){
