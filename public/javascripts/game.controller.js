@@ -14,10 +14,9 @@
                        'Mass', 'Vacuum','Row','Iron','Chair','Bomb','Embassy','Paper',
                        'Africa','Mint','Maple','Bat','Ship','Bear','Line',
                        'Note','Fire','Glass','Key'];
-
         vm.selectedIndex = [-1];
+
         // Functions
-        vm.addMessage = addMessage;
         vm.checkSquare = checkSquare;
         vm.squareSelected = squareSelected;
         vm.endRound = endRound;
@@ -29,6 +28,8 @@
         vm.numArray = loadNumArray();
         vm.wordList = [];
         vm.answerSheet = [];
+        vm.playerOne;
+        vm.playerTwo;
 
         class Person {
             constructor(word, type){
@@ -36,6 +37,29 @@
                 this.type = type;
                 this.reveal = false;
             }
+        }
+
+        class User {
+            constructor(id, grid) {
+                this.userId = id;
+                this.playerGrid = grid;
+                this.playerAnswer = [];
+            }
+        }
+
+        function prepareUser() {
+            getRandomAgentNumbers();
+            getRandomAssassinNumbers();
+            loadWordList();
+        }
+
+        function clearUser() {
+            vm.numArray = [];
+            vm.numArray = loadNumArray();
+            vm.agentNumbers = [];
+            vm.assassinNumbers = [];
+            vm.wordList = [];
+            vm.answerSheet = [];
         }
 
         vm.getRandomAgentNumbers = getRandomAgentNumbers;
@@ -70,6 +94,25 @@
         SocketService.on('codeWordReturned', function(word){
             vm.returnedWord = word;
         });
+
+        SocketService.on('startRound', function(users) {
+            clearUser();
+            prepareUser();
+            vm.playerOne = null;
+            vm.playerOne = new User(users[0],vm.wordList);
+            console.log(vm.playerOne);
+
+            clearUser();
+            prepareUser();
+            vm.playerTwo = null;
+            vm.playerTwo = new User(users[1],vm.wordList);
+            console.log(vm.playerTwo);
+            vm.wordList = [];
+            vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
+            vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
+
+            console.log(vm.answerSheet);
+        })
 
         SocketService.on('returnedAnswers', function(answers){
           vm.wordList = answers;
@@ -107,32 +150,27 @@
 
             console.log(vm.wordList);
 
-
-           vm.agentNumbers.forEach(function(x) {
+            console.log("The agents: " + vm.agentNumbers);
+            vm.agentNumbers.forEach(function(x) {
                vm.wordList[x].type = "agent";
-               vm.answerSheet[x].type = "agent"
-           })
+               vm.answerSheet[x].type = "agent";
+            });
 
-           vm.assassinNumbers.forEach(function(x) {
+            console.log("The assassins: " + vm.assassinNumbers);
+            vm.assassinNumbers.forEach(function(x) {
                vm.wordList[x].type = "assassin";
                vm.answerSheet[x].type = "assassin";
-           })
+            });
 
-           SocketService.emit('answerSheet', vm.answerSheet);
+            SocketService.emit('answerSheet', vm.answerSheet);
         };
 
         function getRandomAgentNumbers() {
             var x;
-
             while(vm.numArray.length >= 13 ) {
                 x = vm.numArray.splice(Math.floor(Math.random() * vm.numArray.length),1);
                 vm.agentNumbers.push(x[0]);
             }
-
-            console.log(vm.agentNumbers);
-            console.log(vm.numArray);
-
-            getRandomAssassinNumbers();
         }
 
         function getRandomAssassinNumbers() {
@@ -141,14 +179,7 @@
                 x = vm.numArray.splice(Math.floor(Math.random() * vm.numArray.length),1);
                 vm.assassinNumbers.push(x[0]);
             }
-
             console.log(vm.assassinNumbers);
-
-            loadWordList();
-            console.log(vm.wordList);
         }
-
-        getRandomAgentNumbers();
-
     }
 })();
