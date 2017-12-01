@@ -88,19 +88,20 @@
           // console.log(number);
           vm.active = !vm.active;
           console.log(vm.active);
-          SocketService.emit('toggle', vm.active);
+          SocketService.emit('toggle');
           //SocketService.emit('bumpRound',number)
         }
 
         function checkSquare(guess) {
           if(vm.wordList[guess].type == 'bystander'){
-            SocketService.emit('bumpRound', ++vm.roundNumber);
+            vm.active = !vm.active;
+            console.log(vm.active);
+            SocketService.emit('toggle');
           }
           if(vm.wordList[guess].type == 'assassin'){
             SocketService.emit('bumpRound', 1);
           }
           vm.wordList[guess].reveal = true;
-          console.log(vm.playerOne.userId);
           SocketService.emit('guessed', guess)
         }
 
@@ -125,6 +126,7 @@
         SocketService.on('yourTurn', function(){
           vm.active = !vm.active;
           console.log(vm.active);
+          SocketService.emit('bumpRound', ++vm.roundNumber);
         })
 
         SocketService.on('startRound', function(users) {
