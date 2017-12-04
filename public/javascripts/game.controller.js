@@ -10,12 +10,13 @@
         var vm = this;
         //Variables
         vm.codeword = "";
-        vm.words = ['Pants', 'Fan', 'Australia', 'Part', 'Dinosaur', 'Carrot',
+        vm.words = [/*'Pants', 'Fan', 'Australia', 'Part', 'Dinosaur', 'Carrot',
                         'Mass', 'Vacuum','Row','Iron','Chair','Bomb','Embassy','Paper',
                        'Africa','Mint','Bird','Bat','Ship','Bear','Line',
-                       'Note','Fire','Glass','Key'];
+    'Note','Fire','Glass','Key'*/];
         vm.selectedIndex = [-1];
         vm.showGame;
+        vm.showLoad;
         vm.showWait;
 
         // Functions
@@ -53,18 +54,9 @@
         }
 
         function prepareUser() {
-            getRandomAgentNumbers();
-            getRandomAssassinNumbers();
             loadCardList();
-        }
-
-        function clearUser() {
-            vm.numArray = [];
-            vm.numArray = loadNumArray();
             vm.agentNumbers = [];
             vm.assassinNumbers = [];
-            vm.cardList = [];
-            vm.answerSheet = [];
         }
 
         vm.getRandomAgentNumbers = getRandomAgentNumbers;
@@ -128,20 +120,13 @@
         })
 
         SocketService.on('startRound', function(users) {
-            clearUser();
-            prepareUser();
-            vm.playerOne = null;
-            vm.playerOne = new User(users[0],vm.cardList);
-            clearUser();
-            prepareUser();
-            vm.playerTwo = null;
-            vm.playerTwo = new User(users[1],vm.cardList);
-            vm.cardList = [];
-            vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
-            vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
-            vm.showGame = true;
-            vm.showWait = false;
-            // console.log(vm.answerSheet);
+            getCardWords()
+                .then(function(wordArray) {
+                    if(!vm.active){
+                        vm.words = wordArray;
+                    }
+                    SocketService.emit('wordsSent', wordArray, users);
+                })
         })
 
         SocketService.on('returnedAnswers', function(answers){
@@ -152,8 +137,37 @@
           // console.log(vm.cardList[guess].word+" Has been clicked");
         });
 
-        SocketService.on('returnedWords', function(words) {
+        SocketService.on('returnedWords', function(words, users) {
             vm.words = words;
+
+            console.log(vm.words);
+            getCardTypes()
+                .then(function(response) {
+                    vm.cardList = [];
+                    vm.answerSheet = [];
+                    prepareUser();
+                    vm.playerOne = null;
+                    vm.playerOne = new User(users[0],vm.cardList);
+                    return getCardTypes();
+                })
+                .then(function(response){
+                    vm.cardList = [];
+                    vm.answerSheet = [];
+                    prepareUser();
+                    vm.playerTwo = null;
+                    vm.playerTwo = new User(users[1],vm.cardList);
+                    return getCardTypes();
+                })
+                .then(function(response) {
+                    vm.cardList = [];
+                    vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
+                    vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
+                    vm.showGame = true;
+                    vm.showWait = false;
+                })
+                .catch(function(error) {
+                    console.log(error);
+                })
         });
 
         function loadNumArray() {
@@ -244,7 +258,6 @@
                     x = numArray.splice(Math.floor(Math.random() * numArray.length),1);
                     assassins.push(x[0]);
                 }
-                
                 var data = {};
                 data.assassins = assassins;
                 data.numbers = numArray;
@@ -254,15 +267,6 @@
                     rejects("Error: could not allocate assassins");
                 }
             });
-        }
-
-        function getRandomAssassinNumbers() {
-            var x;
-            while(vm.numArray.length >= 10 ) {
-                x = vm.numArray.splice(Math.floor(Math.random() * vm.numArray.length),1);
-                vm.assassinNumbers.push(x[0]);
-            }
-            // console.log(vm.assassinNumbers);
         }
 
         function getWordsFromFilePromise() {
@@ -296,7 +300,7 @@
             })
         }
 
-        function loadWords() {
+        function getCardWords() {
             return new Promise(function(resolve,reject) {
                 getWordsFromFilePromise()
                 .then(function(wordArray) {
@@ -304,29 +308,35 @@
                     return getWordsPromise(wordArray);
                 })
                 .then(function(wordArray) {
-                    console.log(wordArray);
-                    SocketService.emit('wordsSent', wordArray);
-                    resolve("resolved");
+                    resolve(wordArray);
+                })
+                .catch(function(error) {
+                    reject(error);
                 });
             });
         }
 
-        getNumbersPromise()
-            .then(function(numbers) {
-                console.log(numbers);
-                return getAgentsPromise(numbers);
+
+        function getCardTypes() {
+            return new Promise(function(resolve,reject) {
+                getNumbersPromise()
+                .then(function(numbers) {
+                    return getAgentsPromise(numbers);
+                })
+                .then(function(data) {
+                    vm.agentNumbers = data.agents;
+                    console.log("The agents are" + data.agents);
+                    return getAssassinsPromise(data.numbers);
+                })
+                .then(function(data) {
+                    vm.assassinNumbers = data.assassins;
+                    console.log("The assassins are" + data.assassins);
+                    resolve("Finished getting card types.");
+                })
+                .catch(function(error) {
+                    reject(error);
+                });
             })
-            .then(function(data) {
-                console.log("The agents are" + data.agents);
-                console.log("The remaining numbers:" + data.numbers);
-                return getAssassinsPromise(data.numbers);
-            })
-            .then(function(data) {
-                console.log("The assassins are" + data.assassins);
-                console.log("The remaining numbers: + data.numbers");
-            })
-            .catch(function(error) {
-                console.log("Failed!",error);
-            });
+        }
     }
 })();
