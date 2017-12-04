@@ -35,6 +35,10 @@ io.on('connection', function(socket){
     socket.broadcast.emit('returnGuess', guess)
   });
 
+  socket.on('newGame', function(){
+    io.emit('startRound', users);
+  })
+
   socket.on('disconnect', function(){
     var index = users.indexOf(socket.id);
     users.splice(index,1);

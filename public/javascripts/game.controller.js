@@ -4,9 +4,9 @@
 
     angular
         .module('app')
-        .controller('GameController', ['$scope','SocketService', GameController]);
+        .controller('GameController', ['$scope', '$route', 'SocketService', GameController]);
 
-    function GameController($scope, SocketService) {
+    function GameController($scope, $route, SocketService) {
         var vm = this;
         //Variables
         vm.codeword = "";
@@ -65,6 +65,7 @@
             vm.assassinNumbers = [];
             vm.wordList = [];
             vm.answerSheet = [];
+            vm.roundNumber = 1;
         }
 
         vm.getRandomAgentNumbers = getRandomAgentNumbers;
@@ -99,7 +100,7 @@
             SocketService.emit('toggle');
           }
           if(vm.wordList[guess].type == 'assassin'){
-            SocketService.emit('bumpRound', 1);
+            SocketService.emit('newGame');
           }
           vm.wordList[guess].reveal = true;
           SocketService.emit('guessed', guess)
