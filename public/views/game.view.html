@@ -18,6 +18,7 @@
     </div>
     <form class="pure-form">
       <fieldset>
+      <p class="title">{{vm.active === true ? "" : "Give your hint!"}}</p>
       <p class="suggestion">{{game.returnedWord}}</p>
         <input type = "text" ng-model="game.codeWord">
         <button type = "submit" class="pure-button submitButton" ng-click="game.addMessage()">Submit</button>
@@ -26,8 +27,8 @@
     </form>
     <br><hr>
 
-    <div><p>This is your ally's spy locations. Help them find their agents!</p></div>
-    <div class = "pure-g answersheet" ng-repeat="word in game.answerSheet track by $index" ng-if = "$index % 5 == 0">
+    <div><p class="title">This is your ally's spy locations. Help them find their agents!</p></div>
+    <div class = "pure-g disable answersheet" ng-repeat="word in game.answerSheet track by $index" ng-if = "$index % 5 == 0">
       <div class = "answercell pure-u-1-5" ng-class="{assassin: game.answerSheet[i].type == 'assassin', agent: game.answerSheet[i].type == 'agent', bystander: game.answerSheet[i].type == 'bystander'}" ng-click="game.checkSquare(i)" ng-repeat="i in [$index, $index+1, $index+2, $index+3, $index+4]" ng-if="game.answerSheet[i] != null">
         {{game.playerTwo.playerAnswer[i].word}}
       </div>

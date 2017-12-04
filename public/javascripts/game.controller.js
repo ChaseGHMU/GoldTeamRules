@@ -10,10 +10,8 @@
         var vm = this;
         //Variables
         vm.codeword = "";
-        vm.words = [/*'Pants', 'Fan', 'Australia', 'Part', 'Dinosaur', 'Carrot',
-                        'Mass', 'Vacuum','Row','Iron','Chair','Bomb','Embassy','Paper',
-                       'Africa','Mint','Bird','Bat','Ship','Bear','Line',
-    'Note','Fire','Glass','Key'*/];
+        vm.codePrompt = "Give your hint!";
+        vm.words = [];
         vm.selectedIndex = [-1];
         vm.showGame;
         vm.showLoad;
