@@ -55,4 +55,7 @@ io.on('connection', function(socket){
   socket.on('codeWordSent', function(word){
     socket.broadcast.emit('codeWordReturned', word);
   });
+  socket.on('wordsSent', function(words) {
+    socket.broadcast.emit('returnedWords', words);
+  });
 });

@@ -4,14 +4,14 @@
 
     angular
         .module('app')
-        .controller('GameController', ['$scope','SocketService', GameController]);
+        .controller('GameController', ['$http','$scope','SocketService', GameController]);
 
-    function GameController($scope, SocketService) {
+    function GameController($http, scope, SocketService) {
         var vm = this;
         //Variables
         vm.codeword = "";
         vm.words = ['Pants', 'Fan', 'Australia', 'Part', 'Dinosaur', 'Carrot',
-                       'Mass', 'Vacuum','Row','Iron','Chair','Bomb','Embassy','Paper',
+                        'Mass', 'Vacuum','Row','Iron','Chair','Bomb','Embassy','Paper',
                        'Africa','Mint','Bird','Bat','Ship','Bear','Line',
                        'Note','Fire','Glass','Key'];
         vm.selectedIndex = [-1];
@@ -29,7 +29,7 @@
         vm.agentNumbers = [];
         vm.assassinNumbers = [];
         vm.numArray = loadNumArray();
-        vm.wordList = [];
+        vm.cardList = [];
         vm.answerSheet = [];
         vm.playerOne;
         vm.playerTwo;
@@ -55,7 +55,7 @@
         function prepareUser() {
             getRandomAgentNumbers();
             getRandomAssassinNumbers();
-            loadWordList();
+            loadCardList();
         }
 
         function clearUser() {
@@ -63,12 +63,12 @@
             vm.numArray = loadNumArray();
             vm.agentNumbers = [];
             vm.assassinNumbers = [];
-            vm.wordList = [];
+            vm.cardList = [];
             vm.answerSheet = [];
         }
 
         vm.getRandomAgentNumbers = getRandomAgentNumbers;
-        vm.loadWordList = loadWordList;
+        vm.loadCardList = loadCardList;
 
         function addMessage() {
           console.log(vm.codeWord);
@@ -93,13 +93,13 @@
         }
 
         function checkSquare(guess) {
-          if(vm.wordList[guess].type == 'bystander'){
+          if(vm.cardList[guess].type == 'bystander'){
             SocketService.emit('bumpRound', ++vm.roundNumber);
           }
-          if(vm.wordList[guess].type == 'assassin'){
+          if(vm.cardList[guess].type == 'assassin'){
             SocketService.emit('bumpRound', 1);
           }
-          vm.wordList[guess].reveal = true;
+          vm.cardList[guess].reveal = true;
           console.log(vm.playerOne.userId);
           SocketService.emit('guessed', guess)
         }
@@ -131,12 +131,12 @@
             clearUser();
             prepareUser();
             vm.playerOne = null;
-            vm.playerOne = new User(users[0],vm.wordList);
+            vm.playerOne = new User(users[0],vm.cardList);
             clearUser();
             prepareUser();
             vm.playerTwo = null;
-            vm.playerTwo = new User(users[1],vm.wordList);
-            vm.wordList = [];
+            vm.playerTwo = new User(users[1],vm.cardList);
+            vm.cardList = [];
             vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
             vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
             vm.showGame = true;
@@ -145,11 +145,15 @@
         })
 
         SocketService.on('returnedAnswers', function(answers){
-          vm.wordList = answers;
+          vm.cardList = answers;
         });
 
         SocketService.on('returnGuess', function(guess){
-          // console.log(vm.wordList[guess].word+" Has been clicked");
+          // console.log(vm.cardList[guess].word+" Has been clicked");
+        });
+
+        SocketService.on('returnedWords', function(words) {
+            vm.words = words;
         });
 
         function loadNumArray() {
@@ -163,24 +167,41 @@
             return numArray;
         }
 
-        function loadWordList() {
+        function getNumbersPromise() {
+            return new Promise(function(resolve,reject) {
+                var n = 0;
+                var numbers = [];
+                while(n <= 24) {
+                    numbers.push(n);
+                    n++;
+                }
+
+                resolve(numbers);
+
+                if(numbers.length != 25) {
+                    reject("Error: could not determine numbers for grid");
+                }
+            })
+        }
+
+        function loadCardList() {
             vm.words.forEach(function(w) {
                 var x = new Card(w, "bystander");
-                vm.wordList.push(x);
+                vm.cardList.push(x);
                 vm.answerSheet.push(x);
             });
 
-            // console.log(vm.wordList);
+            // console.log(vm.cardList);
 
             // console.log("The agents: " + vm.agentNumbers);
             vm.agentNumbers.forEach(function(x) {
-               vm.wordList[x].type = "agent";
+               vm.cardList[x].type = "agent";
                vm.answerSheet[x].type = "agent";
             });
 
             // console.log("The assassins: " + vm.assassinNumbers);
             vm.assassinNumbers.forEach(function(x) {
-               vm.wordList[x].type = "assassin";
+               vm.cardList[x].type = "assassin";
                vm.answerSheet[x].type = "assassin";
             });
 
@@ -195,6 +216,46 @@
             }
         }
 
+        function getAgentsPromise(numArray) {
+            return new Promise(function(resolve,reject) {
+                var x;
+                var agents = [];
+                while(numArray.length >= 13) {
+                    x = numArray.splice(Math.floor(Math.random() * numArray.length),1)
+                    agents.push(x[0])
+                }
+
+                var data = {};
+                data.agents = agents;
+                data.numbers = numArray;
+                resolve(data);
+
+                if(agents == null) {
+                    reject("Error: could not get agents");
+                }
+            ;})
+        }
+
+        function getAssassinsPromise(numArray) {
+            return new Promise(function (resolve,reject) {
+                var x;
+                var assassins = [];
+                while(numArray.length >= 10 ) {
+                    x = numArray.splice(Math.floor(Math.random() * numArray.length),1);
+                    assassins.push(x[0]);
+                }
+                
+                var data = {};
+                data.assassins = assassins;
+                data.numbers = numArray;
+                resolve(data);
+
+                if(assassins == null) {
+                    rejects("Error: could not allocate assassins");
+                }
+            });
+        }
+
         function getRandomAssassinNumbers() {
             var x;
             while(vm.numArray.length >= 10 ) {
@@ -203,5 +264,69 @@
             }
             // console.log(vm.assassinNumbers);
         }
+
+        function getWordsFromFilePromise() {
+            return new Promise(function(resolve,reject) {
+                $http.get('../modules/WordFile.txt')
+                    .then(function (words) {
+                        var wordArray = words.data.split('\n');
+                        resolve(wordArray);
+                    }, function(error) {
+                        reject(error);
+                    });
+                });
+        };
+
+        function getWordsPromise(wordArray) {
+            return new Promise(function(resolve,reject) {
+                var i = 24;
+                var x = [];
+                var words = [];
+                while(i >= 0) {
+                    x = wordArray.splice(Math.floor(Math.random() * wordArray.length),1);
+                    words.push(x[0]);
+                    i = i - 1;
+                }
+
+                resolve(words);
+
+                if(words == []) {
+                    reject("Error: could not assign words");
+                }
+            })
+        }
+
+        function loadWords() {
+            return new Promise(function(resolve,reject) {
+                getWordsFromFilePromise()
+                .then(function(wordArray) {
+                    console.log(wordArray);
+                    return getWordsPromise(wordArray);
+                })
+                .then(function(wordArray) {
+                    console.log(wordArray);
+                    SocketService.emit('wordsSent', wordArray);
+                    resolve("resolved");
+                });
+            });
+        }
+
+        getNumbersPromise()
+            .then(function(numbers) {
+                console.log(numbers);
+                return getAgentsPromise(numbers);
+            })
+            .then(function(data) {
+                console.log("The agents are" + data.agents);
+                console.log("The remaining numbers:" + data.numbers);
+                return getAssassinsPromise(data.numbers);
+            })
+            .then(function(data) {
+                console.log("The assassins are" + data.assassins);
+                console.log("The remaining numbers: + data.numbers");
+            })
+            .catch(function(error) {
+                console.log("Failed!",error);
+            });
     }
 })();
