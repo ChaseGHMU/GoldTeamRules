@@ -96,80 +96,6 @@
           SocketService.emit('guessed', guess)
         }
 
-        SocketService.on('bumpRound', function(number){
-          vm.roundNumber = number;
-        })
-
-        SocketService.on('isActive', function(toggle){
-          vm.active = toggle;
-          console.log(vm.active);
-        })
-
-        SocketService.on('notEnoughUsers', function(){
-            vm.showGame = false;
-            vm.showWait = true;
-        });
-
-        SocketService.on('codeWordReturned', function(word){
-            vm.returnedWord = word;
-        });
-
-        SocketService.on('yourTurn', function(){
-          vm.active = !vm.active;
-          console.log(vm.active);
-        })
-
-        SocketService.on('startRound', function(users) {
-            getCardWords()
-                .then(function(wordArray) {
-                    if(!vm.active){
-                        vm.words = wordArray;
-                    }
-                    SocketService.emit('wordsSent', wordArray, users);
-                })
-        })
-
-        SocketService.on('returnedAnswers', function(answers){
-          vm.cardList = answers;
-        });
-
-        SocketService.on('returnGuess', function(guess){
-          // console.log(vm.cardList[guess].word+" Has been clicked");
-        });
-
-        SocketService.on('returnedWords', function(words, users) {
-            vm.words = words;
-
-            console.log(vm.words);
-            getCardTypes()
-                .then(function(response) {
-                    vm.cardList = [];
-                    vm.answerSheet = [];
-                    prepareUser();
-                    vm.playerOne = null;
-                    vm.playerOne = new User(users[0],vm.cardList);
-                    return getCardTypes();
-                })
-                .then(function(response){
-                    vm.cardList = [];
-                    vm.answerSheet = [];
-                    prepareUser();
-                    vm.playerTwo = null;
-                    vm.playerTwo = new User(users[1],vm.cardList);
-                    return getCardTypes();
-                })
-                .then(function(response) {
-                    vm.cardList = [];
-                    vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
-                    vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
-                    vm.showGame = true;
-                    vm.showWait = false;
-                })
-                .catch(function(error) {
-                    console.log(error);
-                })
-        });
-
         function loadNumArray() {
             var n = 0;
             var numArray = [];
@@ -338,5 +264,79 @@
                 });
             })
         }
+
+        SocketService.on('bumpRound', function(number){
+            vm.roundNumber = number;
+          })
+  
+          SocketService.on('isActive', function(toggle){
+            vm.active = toggle;
+            console.log(vm.active);
+          })
+  
+          SocketService.on('notEnoughUsers', function(){
+              vm.showGame = false;
+              vm.showWait = true;
+          });
+  
+          SocketService.on('codeWordReturned', function(word){
+              vm.returnedWord = word;
+          });
+  
+          SocketService.on('yourTurn', function(){
+            vm.active = !vm.active;
+            console.log(vm.active);
+          })
+  
+          SocketService.on('startRound', function(users) {
+              getCardWords()
+                  .then(function(wordArray) {
+                      if(!vm.active){
+                          vm.words = wordArray;
+                      }
+                      SocketService.emit('wordsSent', wordArray, users);
+                  })
+          })
+  
+          SocketService.on('returnedAnswers', function(answers){
+            vm.cardList = answers;
+          });
+  
+          SocketService.on('returnGuess', function(guess){
+            // console.log(vm.cardList[guess].word+" Has been clicked");
+          });
+  
+          SocketService.on('returnedWords', function(words, users) {
+              vm.words = words;
+  
+              console.log(vm.words);
+              getCardTypes()
+                  .then(function(response) {
+                      vm.cardList = [];
+                      vm.answerSheet = [];
+                      prepareUser();
+                      vm.playerOne = null;
+                      vm.playerOne = new User(users[0],vm.cardList);
+                      return getCardTypes();
+                  })
+                  .then(function(response){
+                      vm.cardList = [];
+                      vm.answerSheet = [];
+                      prepareUser();
+                      vm.playerTwo = null;
+                      vm.playerTwo = new User(users[1],vm.cardList);
+                      return getCardTypes();
+                  })
+                  .then(function(response) {
+                      vm.cardList = [];
+                      vm.playerOne.playerAnswer = vm.playerTwo.playerGrid;
+                      vm.playerTwo.playerAnswer = vm.playerOne.playerGrid;
+                      vm.showGame = true;
+                      vm.showWait = false;
+                  })
+                  .catch(function(error) {
+                      console.log(error);
+                  })
+          });
     }
 })();
