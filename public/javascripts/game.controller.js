@@ -23,6 +23,7 @@
         vm.squareSelected = squareSelected;
         vm.endRound = endRound;
         vm.addMessage = addMessage;
+        vm.guessedWord;
         vm.codeWord;
         vm.roundNumber = 1;
         vm.returnedWord;
@@ -95,6 +96,7 @@
         function checkSquare(guess) {
           if(vm.wordList[guess].type == 'bystander'){
             vm.active = !vm.active;
+            vm.guessedWord="";
             console.log(vm.active);
             SocketService.emit('toggle');
           }
@@ -152,6 +154,7 @@
 
         SocketService.on('returnGuess', function(guess){
           // console.log(vm.wordList[guess].word+" Has been clicked");
+          vm.guessedWord = vm.wordList[guess].word;
         });
 
         function loadNumArray() {
