@@ -17,7 +17,7 @@ Gangster
 Spurs
 Step
 Mummy
-Kung Fu
+Kung-Fu
 Wedding
 Minotaur
 Sleep
@@ -29,7 +29,6 @@ Waitress
 Computer
 Tiger
 Bride
-King Arthur
 Cowboy
 Governor
 Cable
@@ -45,7 +44,6 @@ Dentist
 Wheel
 Butterfly
 Zombie
-Joan of Arc
 Blacksmith
 Clock
 Columbus
@@ -141,7 +139,6 @@ Bowl
 Trick
 Crusader
 Farm
-Mona Lisa
 Beer
 Alaska
 Jellyfish
@@ -238,8 +235,3 @@ Fuel
 Earthquake
 Crow
 Magician
-
-
-
-
-
