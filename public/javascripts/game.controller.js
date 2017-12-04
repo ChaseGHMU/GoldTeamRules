@@ -22,6 +22,7 @@
         vm.squareSelected = squareSelected;
         vm.endRound = endRound;
         vm.addMessage = addMessage;
+        vm.guessedWord;
         vm.codeWord;
         vm.roundNumber = 1;
         vm.returnedWord;
@@ -78,19 +79,22 @@
           // console.log(number);
           vm.active = !vm.active;
           console.log(vm.active);
-          SocketService.emit('toggle', vm.active);
+          SocketService.emit('toggle');
           //SocketService.emit('bumpRound',number)
         }
 
         function checkSquare(guess) {
-          if(vm.cardList[guess].type == 'bystander'){
-            SocketService.emit('bumpRound', ++vm.roundNumber);
+          if(vm.wordList[guess].type == 'bystander'){
+            vm.active = !vm.active;
+            vm.guessedWord="";
+            console.log(vm.active);
+            SocketService.emit('toggle');
           }
           if(vm.cardList[guess].type == 'assassin'){
             SocketService.emit('bumpRound', 1);
           }
-          vm.cardList[guess].reveal = true;
-          console.log(vm.playerOne.userId);
+          
+          vm.wordList[guess].reveal = true;
           SocketService.emit('guessed', guess)
         }
 
@@ -264,8 +268,8 @@
         }
 
         SocketService.on('bumpRound', function(number){
-            vm.roundNumber = number;
-          })
+          vm.roundNumber = number;
+        })
   
           SocketService.on('isActive', function(toggle){
             vm.active = toggle;
@@ -284,6 +288,7 @@
           SocketService.on('yourTurn', function(){
             vm.active = !vm.active;
             console.log(vm.active);
+            SocketService.emit('bumpRound', ++vm.roundNumber);
           })
   
           SocketService.on('startRound', function(users) {
@@ -297,11 +302,11 @@
           })
   
           SocketService.on('returnedAnswers', function(answers){
-            vm.cardList = answers;
+            vm.wordList = answers;
           });
   
           SocketService.on('returnGuess', function(guess){
-            // console.log(vm.cardList[guess].word+" Has been clicked");
+            vm.guessedWord = vm.wordList[guess].word;
           });
   
           SocketService.on('returnedWords', function(words, users) {
