@@ -1,95 +1,6 @@
-/*font-family: 'Merienda', cursive;
-font-family: 'Bangers', cursive;
-font-family: 'Press Start 2P', cursive;
-font-family: 'Black Ops One', cursive;*/
-
-body {
-  background-image: url("../img/Grid.png");
-  background-color: #cccccc;
-  background: url("../img/Grid.png") repeat;
-  padding: 10px px 10px 50px;
-  font-family: 'Black Ops One', cursive;
-}
-
-.title {
-  color: steelblue;
-}
-
-.round {
-  color: steelblue;
-}
-
-.suggestion {
-  color: steelblue;
-  font-size: 24px;
-}
-
-a {
-  color: #00B7FF;
-}
-
-.center {
-  text-align: center;
-}
-
-.error {
-  color: red;
-}
-
-.cell {
-  width: 19%;
-  margin: 0.5%;
-  padding: -0.5%;
-  line-height: 60px;
-  /*display: inline-block;*/
-  /*text-align: center;*/
-  background: #e8e8e8;
-}
-
-.board .cell {
-  font-family: 'Black Ops One', 'cursive';
-  font-size: 20px;
-}
-
 .agent{
-  background-image: url("../img/Grid.png");
-  background: #00e3a8;
+  background: #00e3a8 !important;
   color: transparent;
-}
-
-.neutral{
-  background-image: url("../img/Grid.png");
-  background: #ede2cc;
-  color: transparent;
-}
-
-.assassin {
-  background-image: url("../img/Grid.png");
-  background: #c95465;
-  color: transparent;
-}
-
-.chosenAssassin {
-  background: url("../img/Assassin.jpg");
-  background-size: 100%;
-  color: transparent;
-}
-
-.chosenAgent {
-  background: url("../img/Agent.jpg");
-  background-size: 100%;
-  color: transparent;
-}
-
-.chosenBystander {
-  background: url("../img/Bystander.png");
-  background-size: 100%;
-  color: transparent;
-}
-
-.submitButton {
-  background-color: steelblue;
-  color: midnightblue;
 }
 
 .answersheet {
@@ -102,6 +13,64 @@ a {
   width: 19%;
 }
 
-.wait {
+.assassin {
+  background: #c95465 !important;
+  color: transparent;
+}
+
+.bystander{
+  background: #ede2cc !important;
+  color: transparent;
+}
+
+.board .cell {
+  font-family: 'Black Ops One', 'cursive';
+  font-size: 20px;
+}
+
+body {
+  background-image: url("../img/Grid.png");
+  background-color: #cccccc;
+  background: url("../img/Grid.png") repeat;
+  padding: 10px px 10px 50px;
+  font-family: 'Black Ops One', cursive;
+}
+
+.cell {
+  width: 19%;
+  margin: 0.5%;
+  padding: -0.5%;
+  line-height: 60px;
+  background: #e8e8e8;
+}
+
+.board .cell:hover {
+  background: hsl(0, 1%, 84%);
+  cursor: crosshair;
+}
+
+.center {
+  text-align: center;
+}
+
+.submitButton {
+  background-color: steelblue;
+  color: midnightblue;
+}
+
+.suggestion {
   color: steelblue;
+  font-size: 24px;
+}
+
+.title {
+  color: steelblue;
+}
+
+#waitMessage {
+  color: steelblue;
+}
+
+.disable {
+  pointer-events: none;
 }
